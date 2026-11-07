@@ -1,0 +1,57 @@
+hostname CoreSW-Branch1
+ip routing
+vtp domain cisco
+vtp mode server
+vlan 60
+name VOICE
+vlan 70
+name HR
+vlan 80
+name IT
+vlan 90
+name ACCOUNTS
+vlan 100
+name SERVER
+exit
+interface range FastEthernet0/5 - 6
+switchport trunk encapsulation dot1q
+switchport mode trunk
+channel-protocol pagp
+channel-group 1 mode desirable
+no shutdown
+exit
+interface Port-channel 1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+no shutdown
+exit
+interface range FastEthernet0/2 - 4
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 60,70,80,90
+no shutdown
+exit
+! Branch DHCP Pool Configurations
+ip dhcp excluded-address 192.168.20.1 192.168.20.5
+ip dhcp excluded-address 192.168.20.33 192.168.20.35
+ip dhcp excluded-address 192.168.20.65 192.168.20.67
+ip dhcp excluded-address 192.168.20.97 192.168.20.99
+ip dhcp pool VOICE_BRANCH
+network 192.168.20.0 255.255.255.224
+default-router 192.168.20.1
+option 150 ip 20.20.20.20
+ip dhcp pool HR_BRANCH
+network 192.168.20.32 255.255.255.224
+default-router 192.168.20.33
+dns-server 8.8.8.8
+ip dhcp pool IT_BRANCH
+network 192.168.20.64 255.255.255.224
+default-router 192.168.20.65
+dns-server 8.8.8.8
+ip dhcp pool ACCOUNTS_BRANCH
+network 192.168.20.96 255.255.255.224
+default-router 192.168.20.97
+dns-server 8.8.8.8
+! SVIs & HSRP Configuration
+interface Vlan60
+ip address 192.168.20.2 255.255.255.224

@@ -1,0 +1,57 @@
+hostname CoreSW-HQ1
+ip routing
+! VTP & VLAN Database Creation
+vtp domain cisco
+vtp mode server
+vlan 10
+name VOICE
+vlan 20
+name HR
+vlan 30
+name IT
+vlan 40
+name ACCOUNTS
+vlan 50
+name SERVER
+exit
+! PAgP EtherChannel Port-Channel 1 Bundle with CoreSW-HQ2
+interface range FastEthernet0/5 - 6
+switchport trunk encapsulation dot1q
+switchport mode trunk
+channel-protocol pagp
+channel-group 1 mode desirable
+no shutdown
+exit
+interface Port-channel 1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+no shutdown
+exit
+! 802.1Q Trunks to Access Switches (Switch1, Switch2, Switch3)
+interface range FastEthernet0/2 - 4
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40
+no shutdown
+exit
+! Integrated DHCP Engine (Data & Option 150 Voice)
+ip dhcp excluded-address 192.168.10.1 192.168.10.5
+ip dhcp excluded-address 192.168.10.33 192.168.10.35
+ip dhcp excluded-address 192.168.10.65 192.168.10.67
+ip dhcp excluded-address 192.168.10.97 192.168.10.99
+ip dhcp pool VOICE_HQ
+network 192.168.10.0 255.255.255.224
+default-router 192.168.10.1
+option 150 ip 10.10.10.10
+ip dhcp pool HR_HQ
+network 192.168.10.32 255.255.255.224
+default-router 192.168.10.33
+dns-server 8.8.8.8
+ip dhcp pool IT_HQ
+network 192.168.10.64 255.255.255.224
+default-router 192.168.10.65
+dns-server 8.8.8.8
+ip dhcp pool ACCOUNTS_HQ
+network 192.168.10.96 255.255.255.224
+default-router 192.168.10.97
+dns-server 8.8.8.8

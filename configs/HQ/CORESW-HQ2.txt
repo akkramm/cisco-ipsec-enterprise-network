@@ -1,0 +1,49 @@
+hostname CoreSW-HQ2
+ip routing
+vtp domain cisco
+vtp mode client
+interface range FastEthernet0/5 - 6
+switchport trunk encapsulation dot1q
+switchport mode trunk
+channel-protocol pagp
+channel-group 1 mode desirable
+no shutdown
+exit
+interface Port-channel 1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+no shutdown
+exit
+interface range FastEthernet0/2 - 4
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40
+no shutdown
+exit
+interface Vlan10
+ip address 192.168.10.3 255.255.255.224
+standby 1 ip 192.168.10.1
+standby 1 priority 100
+no shutdown
+interface Vlan20
+ip address 192.168.10.35 255.255.255.224
+standby 2 ip 192.168.10.33
+standby 2 priority 100
+no shutdown
+interface Vlan30
+ip address 192.168.10.67 255.255.255.224
+standby 3 ip 192.168.10.65
+standby 3 priority 100
+no shutdown
+interface Vlan40
+ip address 192.168.10.99 255.255.255.224
+standby 4 ip 192.168.10.97
+standby 4 priority 100
+no shutdown
+exit
+interface FastEthernet0/1
+no switchport
+ip address 10.1.1.6 255.255.255.252
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 10.1.1.5

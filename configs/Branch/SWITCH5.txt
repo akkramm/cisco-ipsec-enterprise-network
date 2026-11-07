@@ -1,0 +1,22 @@
+hostname Switch5
+vtp domain cisco
+vtp mode client
+cdp run
+vlan 60
+name VOICE
+vlan 80
+name IT
+exit
+interface range FastEthernet0/1 - 2
+switchport mode trunk
+no shutdown
+exit
+interface range FastEthernet0/3 - 4
+switchport mode access
+switchport access vlan 80
+switchport voice vlan 60
+cdp enable
+spanning-tree portfast
+spanning-tree bpduguard enable
+no shutdown
+exit

@@ -1,0 +1,23 @@
+hostname Switch1
+vtp domain cisco
+vtp mode client
+cdp run
+vlan 10
+name VOICE
+vlan 20
+name HR
+exit
+! Dual Trunks to Core Switches
+interface range FastEthernet0/1 - 2
+switchport mode trunk
+no shutdown
+exit
+! End-Host & IP Phone Connections (PC01, PC02)
+interface range FastEthernet0/3 - 4
+switchport mode access
+switchport access vlan 20
+switchport voice vlan 10
+cdp enable
+spanning-tree portfast
+spanning-tree bpduguard enable
+no shutd

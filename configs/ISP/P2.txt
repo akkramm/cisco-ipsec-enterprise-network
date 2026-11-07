@@ -1,0 +1,21 @@
+hostname P2
+interface Serial0/3/1
+description Core Link to P1
+ip address 30.1.1.14 255.255.255.252
+no shutdown
+exit
+interface Serial0/3/0
+description Core Link to P4
+ip address 30.1.1.18 255.255.255.252
+no shutdown
+exit
+interface Serial0/1/0
+description Link to Router-Branch
+ip address 30.1.1.22 255.255.255.252
+clock rate 64000
+no shutdown
+exit
+router ospf 1
+router-id 3.3.3.3
+network 30.1.1.0 0.0.0.255 area 0
+exit
